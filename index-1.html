@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hecho a Mano · Mendoza</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black:  #111;
+      --white:  #fff;
+      --grey:   #f5f4f2;
+      --mid:    #888;
+      --accent: #b8895a;
+      --serif:  'DM Serif Display', Georgia, serif;
+      --sans:   'DM Sans', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      font-weight: 300;
+      background: var(--white);
+      color: var(--black);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── CARRITO FLOTANTE ── */
+    .cart-btn {
+      position: fixed;
+      top: 24px; right: 24px;
+      z-index: 900;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      transition: background .2s;
+    }
+    .cart-btn:hover { background: var(--accent); }
+    .cart-count {
+      position: absolute;
+      top: -4px; right: -4px;
+      background: var(--accent);
+      color: var(--white);
+      font-size: .65rem;
+      font-weight: 500;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 0 5vw;
+    }
+
+    .hero-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 0;
+      border-bottom: 1px solid #e8e6e2;
+    }
+    .logo {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      letter-spacing: .01em;
+    }
+    .hero-nav-links { display: flex; gap: 2rem; }
+    .hero-nav-links a {
+      text-decoration: none;
+      color: var(--mid);
+      font-size: .85rem;
+      font-weight: 400;
+      transition: color .2s;
+    }
+    .hero-nav-links a:hover { color: var(--black); }
+
+    .hero-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 0 4rem;
+      max-width: 720px;
+    }
+    .hero-eyebrow {
+      font-size: .8rem;
+      color: var(--accent);
+      font-weight: 400;
+      letter-spacing: .08em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      font-weight: 400;
+      margin-bottom: 2rem;
+    }
+    .hero-title em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--mid);
+      max-width: 420px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    .hero-cta {
+      display: inline-flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      padding: .75rem 1.75rem;
+      font-family: var(--sans);
+      font-size: .9rem;
+      font-weight: 400;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--accent); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--black);
+      border: 1px solid #ccc;
+      padding: .75rem 1.75rem;
+      font-family: var(--sans);
+      font-size: .9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color .2s, color .2s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--black); }
+
+    .hero-foot {
+      display: flex;
+      gap: 3rem;
+      padding: 2rem 0;
+      border-top: 1px solid #e8e6e2;
+      flex-wrap: wrap;
+    }
+    .hero-stat span {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      color: var(--accent);
+    }
+    .hero-stat small { font-size: .78rem; color: var(--mid); }
+
+    /* ── PRODUCTOS ── */
+    .section { padding: 6rem 5vw; }
+    .section-label {
+      font-size: .75rem;
+      letter-spacing: .1em;
+      color: var(--mid);
+      margin-bottom: 3rem;
+      font-weight: 400;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px;
+      background: #e8e6e2;
+    }
+    .product-item {
+      background: var(--white);
+      padding: 2.5rem 2rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .product-item:hover { background: var(--grey); }
+    .product-emoji {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      display: block;
+    }
+    .product-tag {
+      font-size: .7rem;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: .06em;
+      margin-bottom: .5rem;
+    }
+    .product-name {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: .5rem;
+      line-height: 1.3;
+    }
+    .product-desc {
+      font-size: .82rem;
+      color: var(--mid);
+      margin-bottom: 1.5rem;
+    }
+    .product-footer {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 1rem;
+    }
+    .product-price {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      color: var(--black);
+    }
+    .product-price small {
+      font-family: var(--sans);
+      font-size: .72rem;
+      color: var(--mid);
+      display: block;
+      font-weight: 300;
+    }
+    .add-btn {
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      width: 36px; height: 36px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+      flex-shrink: 0;
+    }
+    .add-btn:hover { background: var(--accent); }
+
+    /* ── VALORES ── */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    .value-item { border-top: 1px solid #e8e6e2; padding-top: 1.5rem; }
+    .value-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+    .value-title { font-family: var(--serif); font-size: 1rem; margin-bottom: .4rem; }
+    .value-desc { font-size: .82rem; color: var(--mid); line-height: 1.6; }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 3rem; border-top: 1px solid #e8e6e2; }
+    .faq-row { border-bottom: 1px solid #e8e6e2; }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 1.25rem 0;
+      font-family: var(--sans);
+      font-size: .95rem;
+      font-weight: 400;
+      color: var(--black);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .faq-q:hover { color: var(--accent); }
+    .faq-icon { font-size: 1.2rem; flex-shrink: 0; color: var(--mid); transition: transform .2s; }
+    .faq-row.open .faq-icon { transform: rotate(45deg); }
+    .faq-a {
+      font-size: .87rem;
+      color: var(--mid);
+      line-height: 1.7;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease, padding .3s;
+    }
+    .faq-row.open .faq-a { max-height: 200px; padding-bottom: 1.25rem; }
+
+    /* ── RESEÑAS ── */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .review-item { border-top: 2px solid var(--accent); padding-top: 1.5rem; }
+    .review-stars { color: var(--accent); font-size: .85rem; margin-bottom: 1rem; }
+    .review-text {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+      color: var(--black);
+    }
+    .review-name { font-size: .8rem; font-weight: 500; }
+    .review-place { font-size: .75rem; color: var(--mid); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid #e8e6e2;
+      padding: 3rem 5vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-brand { font-family: var(--serif); font-size: 1rem; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: .82rem; color: var(--mid); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--black); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--black); color: var(--white);
+      padding: .7rem 1.4rem;
+      font-size: .85rem;
+      z-index: 9999;
+      opacity: 0; transition: opacity .25s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+
+    /* ── MODAL BASE ── */
+    .overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(17,17,17,.5);
+      z-index: 800;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .overlay.open { display: flex; }
+    .sheet {
+      background: var(--white);
+      width: 100%; max-width: 540px;
+      max-height: 90svh;
+      overflow-y: auto;
+      padding: 2rem 2rem 2.5rem;
+    }
+    .sheet .btn-primary { width: auto; margin-right: auto; margin-left: 0 !important; }
+    .sheet .field { width: 100%; }
+    .sheet-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.75rem;
+    }
+    .sheet-title { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; }
+    .close-btn {
+      background: none; border: none;
+      font-size: 1.4rem; cursor: pointer; color: var(--mid);
+      line-height: 1;
+    }
+    .close-btn:hover { color: var(--black); }
+
+    /* ── CARRITO SHEET ── */
+    .cart-empty { font-size: .9rem; color: var(--mid); padding: 2rem 0; text-align: center; }
+    .cart-line {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 0; border-bottom: 1px solid #e8e6e2;
+      gap: 1rem;
+    }
+    .cart-line-name { font-size: .9rem; font-weight: 400; }
+    .cart-line-qty  { font-size: .78rem; color: var(--mid); }
+    .cart-line-right { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+    .cart-line-price { font-family: var(--serif); font-size: 1rem; }
+    .cart-remove {
+      background: none; border: none;
+      color: var(--mid); cursor: pointer; font-size: .9rem;
+    }
+    .cart-remove:hover { color: #e53935; }
+    .cart-total-row {
+      display: flex; justify-content: space-between;
+      padding: 1.25rem 0;
+      font-family: var(--serif);
+      font-size: 1.2rem;
+    }
+
+    /* ── PRODUCTO SHEET ── */
+    .prod-sheet-icon { font-size: 4rem; text-align: left; margin-bottom: 1.5rem; }
+    .prod-sheet-price { font-family: var(--serif); font-size: 2rem; color: var(--accent); margin-bottom: .4rem; }
+    .prod-sheet-note { font-size: .8rem; color: var(--mid); margin-bottom: 1.75rem; }
+    .qty-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; }
+    .qty-row label { font-size: .85rem; color: var(--mid); }
+    .qty-input {
+      width: 72px; padding: .5rem .75rem;
+      border: 1px solid #ccc; font-family: var(--sans);
+      font-size: .95rem; text-align: center;
+    }
+
+    /* ── CHECKOUT SHEET ── */
+    .field { margin-bottom: 1.1rem; }
+    .field label { display: block; font-size: .78rem; color: var(--mid); margin-bottom: .4rem; letter-spacing: .04em; }
+    .field input,
+    .field textarea {
+      width: 100%; padding: .7rem .9rem;
+      border: 1px solid #ccc;
+      font-family: var(--sans); font-size: .9rem;
+      background: var(--white); color: var(--black);
+    }
+    .field input:focus,
+    .field textarea:focus { outline: 1px solid var(--black); border-color: var(--black); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .hero-nav-links { display: none; }
+      .hero-body { padding: 4rem 0 3rem; }
+      footer { flex-direction: column; align-items: flex-start; }
+      .sheet { padding: 1.5rem 1.25rem 2rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Carrito flotante -->
+  <!-- WhatsApp flotante con desprendible -->
+  <div style="position:fixed;top:80px;right:24px;z-index:900;display:flex;flex-direction:column;align-items:flex-end;gap:.5rem;">
+    <button onclick="toggleWAMenu()" id="waBubble" style="background:#111;color:#fff;width:48px;height:48px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#b8895a'" onmouseout="this.style.background='#111'">💬</button>
+    <div id="waMenu" style="display:none;background:#111;border-radius:8px;overflow:hidden;min-width:180px;">
+      <a href="https://wa.me/5492615692297" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;color:#fff;text-decoration:none;font-family:var(--sans);font-size:.85rem;transition:background .2s;" onmouseover="this.style.background='#b8895a'" onmouseout="this.style.background='transparent'">
+        💬 Enviar por WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <button class="cart-btn" onclick="openCart()" aria-label="Carrito">
+    🛒
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+
+  <!-- HERO -->
+  <section class="hero">
+    <nav class="hero-nav">
+      <span class="logo">Hecho a Mano</span>
+      <div class="hero-nav-links">
+        <a href="#productos">Productos</a>
+        <a href="#info">Nosotros</a>
+        <a href="#resenas">Reseñas</a>
+      </div>
+    </nav>
+
+    <div class="hero-body">
+      <p class="hero-eyebrow">Artesanía · Mendoza, Argentina</p>
+      <h1 class="hero-title">Piezas únicas,<br><em>hechas a mano</em></h1>
+      <p class="hero-sub">Porcelana fría y acero quirúrgico trabajados en nuestro taller. Cada pieza es irrepetible.</p>
+      <div class="hero-cta">
+        <a href="#productos" class="btn-primary">Ver productos</a>
+        <a href="https://wa.me/5492615692297" target="_blank" rel="noopener" class="btn-ghost">Escribir por WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="hero-foot">
+      <div class="hero-stat"><span>100%</span><small>hecho a mano</small></div>
+      <div class="hero-stat"><span>2–6</span><small>días de elaboración</small></div>
+      <div class="hero-stat"><span>Todo</span><small>el país</small></div>
+    </div>
+  </section>
+
+  <!-- PRODUCTOS -->
+  <section class="section" id="productos">
+    <p class="section-label">PRODUCTOS</p>
+    <div class="product-grid">
+
+      <div class="product-item" onclick="openProduct('Osito porcelana — Rosa', 45)">
+        <span class="product-emoji">🧸</span>
+        <p class="product-tag">MÁS VENDIDO</p>
+        <h2 class="product-name">Osito porcelana Rosa</h2>
+        <p class="product-desc">Souvenir artesanal ideal para baby showers y bautismos. Personalizable.</p>
+        <div class="product-footer">
+          <div class="product-price">
+            $45
+            <small>por unidad · mín. 2</small>
+          </div>
+          <button class="add-btn" aria-label="Agregar">+</button>
+        </div>
+      </div>
+
+      <div class="product-item" onclick="openProduct('Osito porcelana — Celeste', 45)">
+        <span class="product-emoji">🧸</span>
+        <p class="product-tag">NUEVO</p>
+        <h2 class="product-name">Osito porcelana Celeste</h2>
+        <p class="product-desc">Souvenir artesanal ideal para baby showers y bautismos. Personalizable.</p>
+        <div class="product-footer">
+          <div class="product-price">
+            $45
+            <small>por unidad · mín. 2</small>
+          </div>
+          <button class="add-btn" aria-label="Agregar">+</button>
+        </div>
+      </div>
+
+      <div class="product-item" onclick="openProduct('Pulsera acero quirúrgico', 3500)">
+        <span class="product-emoji">💎</span>
+        <p class="product-tag">MÁS VENDIDA</p>
+        <h2 class="product-name">Pulsera acero quirúrgico</h2>
+        <p class="product-desc">Diseño artesanal. Hipoalergénica, durable, brillante. Uso diario.</p>
+        <div class="product-footer">
+          <div class="product-price">
+            $3.500
+            <small>por unidad · mín. 2</small>
+          </div>
+          <button class="add-btn" aria-label="Agregar">+</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- VALORES -->
+  <section class="section" id="info" style="background:var(--grey);">
+    <p class="section-label">CÓMO TRABAJAMOS</p>
+    <div class="values-grid">
+      <div class="value-item"><div class="value-icon">🤲</div><p class="value-title">Hecho a mano</p><p class="value-desc">Cada pieza se elabora manualmente en nuestro taller de Mendoza. No hay dos iguales.</p></div>
+      <div class="value-item"><div class="value-icon">🎁</div><p class="value-title">Personalizable</p><p class="value-desc">Nombre y fecha incluidos sin costo adicional. Solo indicanos los datos al pedir.</p></div>
+      <div class="value-item"><div class="value-icon">💳</div><p class="value-title">Pago fácil</p><p class="value-desc">Mercado Pago: tarjeta, débito o transferencia. El link llega por WhatsApp.</p></div>
+      <div class="value-item"><div class="value-icon">🚚</div><p class="value-title">Envíos</p><p class="value-desc">A todo el país. El costo varía por destino y se informa al confirmar el pedido.</p></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <p class="section-label">PREGUNTAS FRECUENTES</p>
+    <div class="faq-list">
+      <div class="faq-row">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>¿Cuánto tarda mi pedido?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a">Sin personalización: 2–3 días hábiles. Con nombre o fecha: 4–6 días hábiles antes del despacho.</div>
+      </div>
+      <div class="faq-row">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>¿Cuál es el mínimo de compra?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a">2 unidades por producto. Para eventos en cantidad escribinos y te damos un presupuesto especial.</div>
+      </div>
+      <div class="faq-row">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>¿Cómo pago?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a">Aceptamos Mercado Pago: tarjeta de crédito, débito o transferencia. Te enviamos el link por WhatsApp.</div>
+      </div>
+      <div class="faq-row">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>¿Puedo personalizar con nombre y fecha?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a">Sí, y no tiene costo adicional. Indicanos los datos al hacer el pedido por WhatsApp.</div>
+      </div>
+      <div class="faq-row">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>¿Envían a todo el país?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a">Sí. El costo depende del destino y te lo informamos al confirmar el pedido.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEÑAS -->
+  <section class="section" id="resenas" style="background:var(--grey);">
+    <p class="section-label">RESEÑAS</p>
+    <div class="reviews-grid">
+      <div class="review-item">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Los ositos para el baby shower quedaron una belleza. Mis amigas no podían creer lo prolijo del trabajo."</p>
+        <p class="review-name">Romina F.</p>
+        <p class="review-place">Guaymallén · hace 5 días</p>
+      </div>
+      <div class="review-item">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"La pulsera de acero la uso todos los días. Cero alergia, brillante como el primer día."</p>
+        <p class="review-name">Claudia M.</p>
+        <p class="review-place">Godoy Cruz · hace 2 semanas</p>
+      </div>
+      <div class="review-item">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Souvenirs para el bautismo de mi hijo. Llegaron perfectos y en tiempo. Atención excelente."</p>
+        <p class="review-name">Martín L.</p>
+        <p class="review-place">Dorrego, Guaymallén · hace 3 semanas</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-brand">Hecho a Mano · Mendoza</span>
+    <div class="footer-links">
+      <a href="https://wa.me/5492615692297" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="#productos">Productos</a>
+      <a href="#resenas">Reseñas</a>
+    </div>
+  </footer>
+
+  <!-- OVERLAY: Carrito -->
+  <div class="overlay" id="cartOverlay" onclick="closeIfBackdrop(event,'cartOverlay')">
+    <div class="sheet">
+      <div class="sheet-head">
+        <span class="sheet-title">Carrito</span>
+        <button class="close-btn" onclick="closeOverlay('cartOverlay')">×</button>
+      </div>
+      <div id="cartLines"></div>
+      <!-- Cupón -->
+      <div id="couponRow" style="display:none;margin-top:1rem;width:100%;">
+        <div style="display:flex;gap:.5rem;align-items:center;">
+          <input id="couponInput" type="text" placeholder="Código de descuento" style="flex:1;padding:.55rem .8rem;border:1px solid #ccc;font-family:var(--sans);font-size:.85rem;">
+          <button onclick="applyCoupon()" style="background:var(--black);color:#fff;border:none;padding:.55rem 1rem;font-family:var(--sans);font-size:.82rem;cursor:pointer;">Aplicar</button>
+        </div>
+        <p id="couponMsg" style="font-size:.78rem;margin-top:.4rem;color:var(--mid);"></p>
+      </div>
+
+      <div class="cart-total-row" id="cartTotalRow" style="display:none;">
+        <span>Total</span>
+        <span id="cartTotalVal"></span>
+      </div>
+      <div id="discountRow" style="display:none;justify-content:space-between;padding:.25rem 0;color:green;font-size:.85rem;">
+        <span>Descuento (5%)</span>
+        <span id="discountVal"></span>
+      </div>
+      <div id="finalRow" style="display:none;justify-content:space-between;padding:.5rem 0;font-family:var(--serif);font-size:1.2rem;font-weight:bold;">
+        <span>Total final</span>
+        <span id="finalVal"></span>
+      </div>
+      <button class="btn-primary" id="checkoutBtn" style="width:auto;display:none;margin-right:auto;" onclick="goCheckout()">Confirmar pedido</button>
+    </div>
+  </div>
+
+  <!-- OVERLAY: Producto -->
+  <div class="overlay" id="prodOverlay" onclick="closeIfBackdrop(event,'prodOverlay')">
+    <div class="sheet">
+      <div class="sheet-head">
+        <span class="sheet-title" id="prodTitle">Producto</span>
+        <button class="close-btn" onclick="closeOverlay('prodOverlay')">×</button>
+      </div>
+      <div class="prod-sheet-icon" id="prodIcon">🧸</div>
+      <div class="prod-sheet-price">$<span id="prodPrice"></span></div>
+      <div class="prod-sheet-note">por unidad · mínimo 2 unidades</div>
+      <div class="qty-row">
+        <label for="prodQty">Cantidad</label>
+        <input class="qty-input" type="number" id="prodQty" min="2" value="2">
+      </div>
+      <button class="btn-primary" style="width:auto;margin-right:auto;display:block;" onclick="addToCart()">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <!-- OVERLAY: Checkout -->
+  <div class="overlay" id="checkoutOverlay" onclick="closeIfBackdrop(event,'checkoutOverlay')">
+    <div class="sheet">
+      <div class="sheet-head">
+        <span class="sheet-title">Confirmar pedido</span>
+        <button class="close-btn" onclick="closeOverlay('checkoutOverlay')">×</button>
+      </div>
+      <!-- Pasos visuales -->
+      <div style="display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:.4rem;background:#f5f4f2;padding:.4rem .8rem;border-radius:999px;font-size:.75rem;color:#111;">
+          <span style="background:#111;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">1</span>
+          Completá el formulario
+        </div>
+        <div style="display:flex;align-items:center;gap:.4rem;background:#f5f4f2;padding:.4rem .8rem;border-radius:999px;font-size:.75rem;color:#111;">
+          <span style="background:#111;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">2</span>
+          Tocá "Enviar pedido"
+        </div>
+        <div style="display:flex;align-items:center;gap:.4rem;background:#f5f4f2;padding:.4rem .8rem;border-radius:999px;font-size:.75rem;color:#111;">
+          <span style="background:#111;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;">3</span>
+          Confirmá en WhatsApp ✅
+        </div>
+      </div>
+
+      <div class="field"><label>NOMBRE Y APELLIDO *</label><input type="text" id="coName"></div>
+      <div class="field"><label>TELÉFONO / WHATSAPP *</label><input type="tel" id="coPhone"></div>
+      <div class="field"><label>CIUDAD / PROVINCIA *</label><input type="text" id="coCity"></div>
+      <div class="field"><label>DIRECCIÓN DE ENVÍO *</label><input type="text" id="coAddress"></div>
+
+      <!-- Botón con animación de pulso -->
+      <div style="margin-top:1.2rem;">
+        <button onclick="submitOrder()" style="background:#111;color:#fff;border:none;border-radius:999px;padding:.75rem 1.5rem;font-size:.88rem;font-family:var(--sans);cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;animation:pulse 2s infinite;" onmouseover="this.style.background='#b8895a'" onmouseout="this.style.background='#111'">
+          📲 Enviar pedido por WhatsApp
+        </button>
+        <p style="font-size:.72rem;color:#aaa;margin-top:.6rem;">Al tocar el botón se abre WhatsApp con tu pedido listo.<br>Solo tocá <strong>Enviar</strong> dentro de WhatsApp para confirmarlo.</p>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(17,17,17,0.4); }
+      70%  { box-shadow: 0 0 0 10px rgba(17,17,17,0); }
+      100% { box-shadow: 0 0 0 0 rgba(17,17,17,0); }
+    }
+  </style>
+
+  <script>
+    const WA = '5492615692297';
+    let cart = [], current = null;
+
+    const $ = id => document.getElementById(id);
+    const fmt = n => n.toLocaleString('es-AR');
+
+    function showToast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    function openOverlay(id)  { $(id).classList.add('open'); }
+    function closeOverlay(id) { $(id).classList.remove('open'); }
+    function closeIfBackdrop(e, id) { if (e.target === $(id)) closeOverlay(id); }
+
+    /* FAQ */
+    function toggleFaq(btn) {
+      const row = btn.parentElement;
+      const open = row.classList.contains('open');
+      document.querySelectorAll('.faq-row').forEach(r => r.classList.remove('open'));
+      if (!open) row.classList.add('open');
+    }
+
+    /* Producto */
+    function openProduct(name, price) {
+      current = { name, price };
+      $('prodTitle').textContent = name;
+      $('prodPrice').textContent = fmt(price);
+      $('prodIcon').textContent = name.includes('Osito') ? '🧸' : '💎';
+      $('prodQty').value = 2;
+      openOverlay('prodOverlay');
+    }
+
+    function addToCart() {
+      const qty = parseInt($('prodQty').value);
+      if (isNaN(qty) || qty < 2) { showToast('Mínimo 2 unidades'); return; }
+      const found = cart.find(i => i.name === current.name);
+      found ? found.qty += qty : cart.push({ name: current.name, price: current.price, qty });
+      updateBadge();
+      closeOverlay('prodOverlay');
+      showToast('Agregado al carrito');
+    }
+
+    function updateBadge() {
+      $('cartCount').textContent = cart.reduce((s, i) => s + i.qty, 0);
+    }
+
+    /* Carrito */
+    function openCart() {
+      const div = $('cartLines');
+      if (!cart.length) {
+        div.innerHTML = '<p class="cart-empty">Tu carrito está vacío.</p>';
+        $('cartTotalRow').style.display = 'none';
+        $('checkoutBtn').style.display = 'none';
+      } else {
+        let html = '', total = 0;
+        cart.forEach((item, i) => {
+          const sub = item.price * item.qty;
+          total += sub;
+          html += `<div class="cart-line">
+            <div>
+              <div class="cart-line-name">${item.name}</div>
+              <div class="cart-line-qty">${item.qty} × $${fmt(item.price)}</div>
+            </div>
+            <div class="cart-line-right">
+              <span class="cart-line-price">$${fmt(sub)}</span>
+              <button class="cart-remove" onclick="removeItem(${i})">✕</button>
+            </div>
+          </div>`;
+        });
+        div.innerHTML = html;
+        $('cartTotalVal').textContent = '$' + fmt(total);
+        $('cartTotalRow').style.display = 'flex';
+        $('checkoutBtn').style.display = 'block';
+        $('couponRow').style.display = 'block';
+        $('discountRow').style.display = 'none';
+        $('finalRow').style.display = 'none';
+        $('couponMsg').textContent = '';
+        $('couponInput').value = '';
+      }
+      openOverlay('cartOverlay');
+    }
+
+    function removeItem(i) { cart.splice(i, 1); updateBadge(); openCart(); }
+
+    function goCheckout() {
+      closeOverlay('cartOverlay');
+      openOverlay('checkoutOverlay');
+    }
+
+    /* Pedido */
+    function toggleWAMenu() {
+      const menu = $('waMenu');
+      menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+    // Close WA menu clicking outside
+    document.addEventListener('click', function(e) {
+      const bubble = $('waBubble');
+      const menu = $('waMenu');
+      if (bubble && menu && !bubble.contains(e.target) && !menu.contains(e.target)) {
+        menu.style.display = 'none';
+      }
+    });
+
+    function applyCoupon() {
+      const code = $('couponInput').value.trim().toUpperCase();
+      const totalText = $('cartTotalVal').textContent.replace(/[.$]/g, '').replace(',','.');
+      const total = parseFloat(totalText);
+      if (code === 'PROMO10') {
+        const discount = total * 0.05;
+        const final = total - discount;
+        $('discountVal').textContent = '-$' + fmt(Math.round(discount));
+        $('finalVal').textContent = '$' + fmt(Math.round(final));
+        $('discountRow').style.display = 'flex';
+        $('finalRow').style.display = 'flex';
+        $('couponMsg').style.color = 'green';
+        $('couponMsg').textContent = '✅ Código aplicado — 5% de descuento';
+      } else {
+        $('discountRow').style.display = 'none';
+        $('finalRow').style.display = 'none';
+        $('couponMsg').style.color = '#e53935';
+        $('couponMsg').textContent = '❌ Código inválido';
+      }
+    }
+
+    function submitOrder() {
+      const name    = $('coName').value.trim();
+      const phone   = $('coPhone').value.trim();
+      const city    = $('coCity').value.trim();
+      const address = $('coAddress').value.trim();
+
+      if (!name)         { showToast('⚠️ Ingresá tu nombre y apellido');   $('coName').focus();    return; }
+      if (!phone)        { showToast('⚠️ Ingresá tu teléfono / WhatsApp'); $('coPhone').focus();   return; }
+      if (!city)         { showToast('⚠️ Ingresá tu ciudad / provincia');  $('coCity').focus();    return; }
+      if (!address)      { showToast('⚠️ Ingresá tu dirección de envío');  $('coAddress').focus(); return; }
+      if (!cart.length)  { showToast('⚠️ Tu carrito está vacío'); return; }
+
+      let lines = [];
+      lines.push('*Pedido — Hecho a Mano*');
+      lines.push('');
+      lines.push('*Cliente:* ' + name);
+      lines.push('*Tel:* ' + phone);
+      lines.push('*Ciudad:* ' + city);
+      lines.push('*Dirección:* ' + address);
+      lines.push('');
+      lines.push('*Productos:*');
+
+      let total = 0;
+      cart.forEach(function(i) {
+        const sub = i.price * i.qty;
+        total += sub;
+        lines.push('• ' + i.name + ' x' + i.qty + ' = $' + fmt(sub));
+      });
+
+      const couponEl = $('couponInput');
+      const coupon = couponEl ? couponEl.value.trim().toUpperCase() : '';
+      if (coupon === 'PROMO10') {
+        const discount = Math.round(total * 0.05);
+        lines.push('');
+        lines.push('*Subtotal:* $' + fmt(total));
+        lines.push('*Descuento PROMO10 (5%):* -$' + fmt(discount));
+        total = total - discount;
+      }
+
+      lines.push('');
+      lines.push('*Total: $' + fmt(total) + '*');
+
+      const msg = lines.join('\n');
+      const url = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      cart = [];
+      updateBadge();
+      closeOverlay('checkoutOverlay');
+      showToast('¡Pedido enviado! Confirmalo en WhatsApp ✅');
+    }
+  </script>
+
+  <!-- Tidio Chat -->
+  <script src="//code.tidio.co/whxhd1dfw6ijlvvxib44ytzy7bk7k6fm.js" async></script>
+
+</body>
+</html>
